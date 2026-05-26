@@ -1,0 +1,9 @@
+# Variables de entorno y secretos
+.env
+
+# Carpetas de entorno virtual de Python (por si acaso)
+venv/
+__pycache__/
+
+# Subidas de Streamlit
+streamlit/uploads/

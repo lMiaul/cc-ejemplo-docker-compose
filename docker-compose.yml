@@ -1,0 +1,37 @@
+services:
+  streamlit:
+    image: python:3.11-slim
+    container_name: streamlit_app
+    working_dir: /app
+    ports:
+      - "8501:8501"
+    environment:
+      # Variables para Streamlit
+      MONGO_URI: mongodb://admin_user:admin_pass@mongodb:27017/
+      MONGO_DB_NAME: ai_database
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    volumes:
+      - ./streamlit:/app
+      - ./streamlit/uploads:/app/uploads
+    depends_on:
+      - mongodb
+    command: >
+      bash -c "
+      pip install --no-cache-dir -r requirements.txt &&
+      streamlit run app.py --server.address=0.0.0.0
+      "
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb_db
+    ports:
+      - "27017:27017"
+    environment:
+      # Variables para inicializar Mongo
+      MONGO_INITDB_ROOT_USERNAME: admin_user
+      MONGO_INITDB_ROOT_PASSWORD: admin_pass
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
